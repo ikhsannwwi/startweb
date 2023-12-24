@@ -147,7 +147,21 @@
                     $('#buttonCloseUserLogSystem').click();
                 } else {
                     // Handle the case where no row is selected
-                    alert("Please select a user first.");
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: 'btn btn-success mx-4',
+                            cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    });
+
+                    swalWithBootstrapButtons.fire({
+                        title: 'Failed!',
+                        text: 'Please select a user first.',
+                        icon: 'error',
+                        // timer: 1500, // 2 detik
+                        showConfirmButton: true
+                    });
                 }
             });
             // end click di tombol Pilih User

@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="fileinput-preview-profileLabel">Filter Module</h5>
+                <h5 class="modal-title" id="fileinput-preview-profileLabel">Filter Foto Profile</h5>
                 <button type="button" class="close" id="buttonCloseModuleModal" data-dismiss="modal"
                     aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -17,7 +17,7 @@
                     <input type="hidden" name="email" value="{{ $data->user->email ? $data->user->email : '' }}">
                     <div class="d-flex flex-column align-items-center text-center">
                         <div class="fileinput fileinput-new" data-provides="fileinput">
-                            <div class="fileinput-preview thumbnail mb20" data-trigger="fileinput">
+                            <div class="fileinput-preview-image thumbnail mb20">
                                 <img src="{{img_src($data->foto, 'profile') ? img_src($data->foto, 'profile') : ''}}" alt="Admin"
                                     class="rounded-circle" width="150">
                             </div>
@@ -47,6 +47,33 @@
             showRemove: false, // Hilangkan tombol "Remove"
             language: 'id', // Gantilah LANG dengan bahasa yang sesuai
             // Tambahan opsi sesuai kebutuhan Anda
+        });
+
+        const userFotoInputFile = document.getElementById("userFotoInputFile");
+        const previewContainerImage = document.querySelector(".fileinput-preview-image");
+
+        userFotoInputFile.addEventListener("change", function() {
+            const files = this.files;
+
+            // Hapus gambar-gambar sebelumnya
+            previewContainerImage.innerHTML = '';
+
+            // Ambil satu file saja
+            const file = files[0];
+            const imageType = /^image\//;
+
+            if (imageType.test(file.type)) {
+                const imgContainer = document.createElement("div");
+                imgContainer.classList.add("img-thumbnail-container");
+
+                const img = document.createElement("img");
+                img.classList.add("img-thumbnail");
+                img.width = 350; // Sesuaikan ukuran gambar sesuai kebutuhan
+                img.src = URL.createObjectURL(file);
+
+                imgContainer.appendChild(img);
+                previewContainerImage.appendChild(imgContainer);
+            }
         });
     </script>
 @endpush

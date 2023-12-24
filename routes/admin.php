@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\ProfileController;
 use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\LogSystemController;
+use App\Http\Controllers\admin\StatisticController;
 use App\Http\Controllers\admin\UserGroupController;
 
 /*
@@ -100,5 +101,10 @@ Route::prefix('admin')->group(function () {
         Route::put('module/update', [ModuleController::class, 'update'])->name('admin.module.update');
         Route::delete('module/delete', [ModuleController::class, 'delete'])->name('admin.module.delete');
         Route::get('module/getDetail-{id}', [ModuleController::class, 'getDetail'])->name('admin.module.getDetail');
+
+        //Statistic
+        Route::get('statistic', [StatisticController::class, 'index'])->name('admin.statistic');
+        Route::get('statistic/getData', [StatisticController::class, 'getData'])->name('admin.statistic.getData');
+        Route::get('statistic/getDetail{id}', [StatisticController::class, 'getDetail'])->name('admin.statistic.getDetail');
     });
 });

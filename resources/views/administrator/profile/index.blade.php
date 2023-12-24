@@ -217,9 +217,6 @@
     <script src="{{ asset('templateAdmin/assets/js/pages/parsley.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-
-
-
             //validate parsley form
             const form = document.getElementById("form");
             const validator = $(form).parsley();

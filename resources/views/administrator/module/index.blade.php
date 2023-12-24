@@ -85,6 +85,7 @@
                         data: 'action',
                         name: 'action',
                         searchable: false,
+                        sortable: false,
                         class: 'text-center'
                     },
                 ],

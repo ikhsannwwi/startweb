@@ -44,8 +44,8 @@
                     </ul>
                 </li>
             @endif
-            @if (showModule('log_systems', $permissions))
-                <li class="dropdown {{ Route::is('admin.logSystems*') ? 'active' : '' }}">
+            @if (showModule('log_systems', $permissions) || showModule('statistic', $permissions))
+                <li class="dropdown {{ Route::is('admin.logSystems*','admin.statistic*') ? 'active' : '' }}">
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                             class="fas fa-bezier-curve"></i>
                         <span>Systems</span></a>
@@ -53,6 +53,10 @@
                         @if (showModule('log_systems', $permissions))
                             <li class="{{ Route::is('admin.logSystems*') ? 'active' : '' }}"><a class="nav-link"
                                     href="{{ route('admin.logSystems') }}">Logs</a></li>
+                        @endif
+                        @if (showModule('statistic', $permissions))
+                            <li class="{{ Route::is('admin.statistic*') ? 'active' : '' }}"><a class="nav-link"
+                                    href="{{ route('admin.statistic') }}">Statistic</a></li>
                         @endif
                     </ul>
                 </li>

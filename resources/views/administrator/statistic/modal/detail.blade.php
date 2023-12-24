@@ -1,15 +1,15 @@
-<!-- Modal Detail User -->
-<div class="modal fade" tabindex="-1" role="dialog" id="detailLogSystem" data-backdrop="false">
+<!-- Modal Detail -->
+<div class="modal fade" tabindex="-1" role="dialog" id="Detail" data-backdrop="false">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="detailLogSystemLabel">Detail</h5>
-                <button type="button" class="close" id="buttonCloseModuleModal" data-dismiss="modal"
+                <h5 class="modal-title" id="DetailLabel">Detail</h5>
+                <button type="button" class="close" id="buttonCloseDetailModal" data-dismiss="modal"
                     aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id="detailLogSystemBody">
+            <div class="modal-body" id="DetailBody">
                 
             </div>
             <div class="modal-footer bg-whitesmoke br">
@@ -21,11 +21,11 @@
 
 @push('js')
     <script>
-        $('#detailLogSystem').on('show.bs.modal', function(event) {
+        $('#Detail').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var id = button.data('id');
 
-            var modalBody = $('#detailLogSystemBody');
+            var modalBody = $('#DetailBody');
             modalBody.html('<div id="loadingSpinner" style="display: none;">' +
                 '<i class="fas fa-spinner fa-spin"></i> Sedang memuat...' +
                 '</div>');
@@ -34,14 +34,10 @@
             loadingSpinner.show(); // Tampilkan elemen animasi
 
             $.ajax({
-                url: '{{ route('admin.logSystems.getDetail', ':id') }}'.replace(':id', id),
+                url: '{{ route('admin.statistic.getDetail', ':id') }}'.replace(':id', id),
                 method: 'GET',
                 success: function(response) {
                     var data = response.data;
-                    $dataArray = JSON.parse(data.data);
-
-                    var dataJson = JSON.stringify($dataArray, null,
-                        4); // Mengubah objek JSON menjadi string dengan indentasi
 
                     modalBody.html(
                         '<div class="row">' +
@@ -55,37 +51,10 @@
 
                         '<div class="row">' +
                         '<div class="col-5">' +
-                        '<div class="title">User</div>' +
+                        '<div class="title">Page</div>' +
                         '</div>' +
                         '<div class="col-7">' +
-                        '<div class="data">: ' + data.user.name + '</div>' +
-                        '</div>' +
-                        '</div>' +
-
-                        '<div class="row">' +
-                        '<div class="col-5">' +
-                        '<div class="title">Module</div>' +
-                        '</div>' +
-                        '<div class="col-7">' +
-                        '<div class="data">: ' + data.module + '</div>' +
-                        '</div>' +
-                        '</div>' +
-
-                        '<div class="row">' +
-                        '<div class="col-5">' +
-                        '<div class="title">Action</div>' +
-                        '</div>' +
-                        '<div class="col-7">' +
-                        '<div class="data">: ' + data.action + '</div>' +
-                        '</div>' +
-                        '</div>' +
-
-                        '<div class="row">' +
-                        '<div class="col-5">' +
-                        '<div class="title">Tanggal</div>' +
-                        '</div>' +
-                        '<div class="col-7">' +
-                        '<div class="data">: ' + data.created_at + '</div>' +
+                        '<div class="data">: ' + (data.url !== ''? data.url : 'home') + '</div>' +
                         '</div>' +
                         '</div>' +
 
@@ -109,33 +78,39 @@
 
                         '<div class="row">' +
                         '<div class="col-5">' +
-                        '<div class="title">Browser Name</div>' +
+                        '<div class="title">Browser</div>' +
                         '</div>' +
                         '<div class="col-7">' +
-                        '<div class="data">: ' + data.browser_name + '</div>' +
+                        '<div class="data">: ' + data.browser + '</div>' +
                         '</div>' +
                         '</div>' +
 
                         '<div class="row">' +
                         '<div class="col-5">' +
-                        '<div class="title">Browser Version</div>' +
+                        '<div class="title">Platform</div>' +
                         '</div>' +
                         '<div class="col-7">' +
-                        '<div class="data">: ' + data.browser_version + '</div>' +
+                        '<div class="data">: ' + data.platform + '</div>' +
                         '</div>' +
                         '</div>' +
 
-                        '<div class="row mb-4">' +
+                        '<div class="row">' +
                         '<div class="col-5">' +
-                        '<div class="title">Data ID</div>' +
+                        '<div class="title">Visit Time</div>' +
                         '</div>' +
                         '<div class="col-7">' +
-                        '<div class="data">: ' + data.data_id + '</div>' +
+                        '<div class="data">: ' + data.visit_time + '</div>' +
                         '</div>' +
                         '</div>' +
 
-                        '<pre>Data JSON: ' + dataJson +
-                        '</pre>' // Gunakan <pre> untuk melestarikan format JSON
+                        '<div class="row">' +
+                        '<div class="col-5">' +
+                        '<div class="title">Location</div>' +
+                        '</div>' +
+                        '<div class="col-7">' +
+                        '<div class="data">: ' + response.location + '</div>' +
+                        '</div>' +
+                        '</div>' 
                     );
 
                     loadingSpinner.hide(); // Sembunyikan elemen animasi setelah data dimuat

@@ -2,10 +2,10 @@
 
 @section('content')
     @push('section_header')
-        <h1>Log Systems</h1>
+        <h1>Systems</h1>
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item active"><a href="{{ route('admin.dashboard') }}">Dashboard</a></div>
-            <div class="breadcrumb-item">Log Systems</div>
+            <div class="breadcrumb-item">Log</div>
         </div>
     @endpush
     @push('section_title')
