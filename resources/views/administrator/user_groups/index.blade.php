@@ -20,10 +20,12 @@
                         <h4>List Data</h4>
                     </div>
                     <div class="col-4" style="display: flex; justify-content: flex-end;">
-                        <a href="javascript:void(0)" class="btn btn-primary" id="filterButton" style="text-align: center;">Filter</a>
                         @if (isallowed('user', 'add'))
-                            <a href="{{ route('admin.user_groups.add') }}" class="btn btn-primary mx-3" style="text-align: center;">Tambah Data</a>
+                            <a href="{{ route('admin.user_groups.add') }}" class="btn btn-primary mx-3"
+                                style="text-align: center;">Tambah Data</a>
                         @endif
+                        <a href="javascript:void(0)" class="btn btn-primary" id="filterButton"
+                            style="text-align: center;">Filter</a>
                     </div>
                 </div>
                 @include('administrator.user_groups.filter.main')
@@ -32,9 +34,9 @@
                         <table class="table" id="datatable">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th width="325px">Nama</th>
-                                    <th width="250px">Status</th>
+                                    <th width="15px">No</th>
+                                    <th width="100%">Nama</th>
+                                    <th width="150px">Status</th>
                                     <th width="200px">Action</th>
                                 </tr>
                             </thead>
@@ -226,6 +228,17 @@
                 data_table.ajax.url('{{ route('admin.user_groups.getData') }}?status=' + filterStatus)
                     .load();
             });
+
+            $('#reset-btn').on('click', function(event) {
+                event.preventDefault(); // Prevent the default form submission behavior
+
+                // Reset all input fields
+                $('#filterstatus').val('');
+
+                // Update the DataTable with the filtered data
+                data_table.ajax.url('{{ route('admin.user_groups.getData') }}').load();
+            });
+
 
             function getStatus() {
                 return $("#filterstatus").val();

@@ -25,7 +25,15 @@ class PermissionSeeder extends Seeder
                     [
                         "identifiers" => "view",
                         "name"        => "View",
-                    ]
+                    ],
+                    [
+                        "identifiers" => "clear",
+                        "name"        => "Clear",
+                    ],
+                    [
+                        "identifiers" => "export",
+                        "name"        => "Export",
+                    ],
                 ]
             ],
             [
@@ -45,16 +53,12 @@ class PermissionSeeder extends Seeder
                         "name"        => "Edit",
                     ],
                     [
-                        "identifiers" => "status",
-                        "name"        => "Status",
+                        "identifiers" => "delete",
+                        "name"        => "Delete",
                     ],
                     [
                         "identifiers" => "detail",
                         "name"        => "Detail",
-                    ],
-                    [
-                        "identifiers" => "delete",
-                        "name"        => "Delete",
                     ],
                     [
                         "identifiers" => "status",
@@ -79,16 +83,12 @@ class PermissionSeeder extends Seeder
                         "name"        => "Edit",
                     ],
                     [
-                        "identifiers" => "status",
-                        "name"        => "Status",
+                        "identifiers" => "delete",
+                        "name"        => "Delete",
                     ],
                     [
                         "identifiers" => "detail",
                         "name"        => "Detail",
-                    ],
-                    [
-                        "identifiers" => "delete",
-                        "name"        => "Delete",
                     ],
                     [
                         "identifiers" => "status",
@@ -101,6 +101,64 @@ class PermissionSeeder extends Seeder
                     [
                         "identifiers" => "restore",
                         "name"        => "Restore",
+                    ],
+                ]
+            ],
+            [
+                "identifiers"   => "profile",
+                "name"          => "Profile",
+                "access"        => [
+                    [
+                        "identifiers" => "view",
+                        "name"        => "View",
+                    ],
+                ]
+            ],
+            [
+                "identifiers"   => "module_management",
+                "name"          => "Module Management",
+                "access"        => [
+                    [
+                        "identifiers" => "view",
+                        "name"        => "View",
+                    ],
+                    [
+                        "identifiers" => "add",
+                        "name"        => "Add",
+                    ],
+                    [
+                        "identifiers" => "edit",
+                        "name"        => "Edit",
+                    ],
+                    [
+                        "identifiers" => "delete",
+                        "name"        => "Delete",
+                    ],
+                    [
+                        "identifiers" => "detail",
+                        "name"        => "Detail",
+                    ],
+                ]
+            ],
+            [
+                "identifiers"   => "settings",
+                "name"          => "Settings",
+                "access"        => [
+                    [
+                        "identifiers" => "main",
+                        "name"        => "Main",
+                    ],
+                    [
+                        "identifiers" => "frontpage",
+                        "name"        => "Frontpage",
+                    ],
+                    [
+                        "identifiers" => "admin",
+                        "name"        => "Admin",
+                    ],
+                    [
+                        "identifiers" => "admin_general",
+                        "name"        => "Admin General",
                     ],
                 ]
             ],

@@ -4,7 +4,7 @@
     @push('section_header')
         <h1>Log Systems</h1>
         <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="{{route('admin.dashboard')}}">Dashboard</a></div>
+            <div class="breadcrumb-item active"><a href="{{ route('admin.dashboard') }}">Dashboard</a></div>
             <div class="breadcrumb-item">Log Systems</div>
         </div>
     @endpush
@@ -31,7 +31,8 @@
                             </a>
                         @endif
                         @if (isallowed('log_system', 'export'))
-                            <a href="{{ route('admin.logSystems.generatePDF') }}" target="_blank" class="btn btn-primary mx-3">
+                            <a href="{{ route('admin.logSystems.generatePDF') }}" target="_blank"
+                                class="btn btn-primary mx-3">
                                 Export
                             </a>
                         @endif
@@ -44,13 +45,13 @@
                         <table class="table table-striped" id="datatable">
                             <thead>
                                 <tr>
-                                    <th class="text-center">
+                                    <th width="15px" class="text-center">
                                         #
                                     </th>
-                                    <th>User</th>
-                                    <th>Module</th>
-                                    <th>Action</th>
-                                    <th>Tanggal</th>
+                                    <th width="100%">User</th>
+                                    <th width="200px">Module</th>
+                                    <th width="200px">Action</th>
+                                    <th width="200px">Tanggal</th>
                                 </tr>
                             </thead>
                         </table>
@@ -134,6 +135,21 @@
                         '|module=' + filterModule)
                     .load();
             });
+
+            $('#reset-btn').on('click', function(event) {
+                event.preventDefault(); // Prevent the default form submission behavior
+
+                $("#inputModule").val('');
+                $("#inputModuleName").val('');
+
+                $("#inputUserName").val('');
+                $("#inputUser").val('');
+
+                // Update the DataTable with the filtered data
+                data_table.ajax.url('{{ route('admin.logSystems.getData') }}')
+                    .load();
+            });
+
 
             function getUser() {
                 return $("#inputUser").val();

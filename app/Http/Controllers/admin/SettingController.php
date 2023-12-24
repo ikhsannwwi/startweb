@@ -14,10 +14,34 @@ class SettingController extends Controller
 {
     private static $module = "settings";
 
+    public function main(){
+        if (!isAllowed(static::$module, "main")) {
+            abort(403);
+        }
+        
+        return view('administrator.settings.main');
+    }
+
+    public function frontpage(){
+        if (!isAllowed(static::$module, "frontpage")) {
+            abort(403);
+        }
+        
+        return view('administrator.settings.frontpage');
+    }
+
+    public function admin(){
+        if (!isAllowed(static::$module, "admin")) {
+            abort(403);
+        }
+        
+        return view('administrator.settings.admin');
+    }
+
     public function index()
     {
         //Check permission
-        if (!isAllowed(static::$module, "setting")) {
+        if (!isAllowed(static::$module, "admin_general")) {
             abort(403);
         }
         $settings = Setting::get()->toArray();
@@ -25,14 +49,14 @@ class SettingController extends Controller
         $settings = array_column($settings, 'value', 'name');
 
         // Ambil pengaturan dari database dan tampilkan di halaman
-        return view('administrator.settings.index', compact('settings'));
+        return view('administrator.settings.admin.index', compact('settings'));
     }
 
     public function update(Request $request)
     {
         // return $request;
         //Check permission
-        if (!isAllowed(static::$module, "setting")) {
+        if (!isAllowed(static::$module, "admin_general")) {
             abort(403);
         }
 
@@ -44,7 +68,14 @@ class SettingController extends Controller
         
         $data_settings = [];
         $data_settings["nama_app_admin"] = $request->nama_app_admin;
-        $data_settings["footer_app_admin"] = $request->footer_app_admin;
+
+        if (!empty($request->footer_app_admin)) {
+            $data_settings["footer_app_admin"] = $request->footer_app_admin;
+        }
+
+        if (!empty($request->admin_main_background_color)) {
+            $data_settings["admin_main_background_color"] = $request->admin_main_background_color;
+        }
         
 
         if ($request->hasFile('logo_app_admin')) {
@@ -64,15 +95,6 @@ class SettingController extends Controller
             Image::make($image->getRealPath())->save($path, 100);
             $data_settings['logo_app_admin'] = $fileName;
         }
-        // elseif ($request->has('remove_logo_app_admin')) {
-        //     if (array_key_exists("logo_app_admin", $settings) && !empty($settings["logo_app_admin"])) {
-        //         $image_path = "./administrator/assets/media/settings/" . $settings["logo_app_admin"];
-        //         if (File::exists($image_path)) {
-        //             File::delete($image_path);
-        //         }
-        //         $data_settings['logo_app_admin'] = null;
-        //     }
-        // }
 
         if ($request->hasFile('favicon')) {
             if (array_key_exists("favicon", $settings)) {
@@ -91,43 +113,6 @@ class SettingController extends Controller
             Image::make($image->getRealPath())->save($path, 100);
             $data_settings['favicon'] = $fileName;
         }
-        // elseif ($request->has('remove_favicon')) {
-        //     if (array_key_exists("favicon", $settings) && !empty($settings["favicon"])) {
-        //         $image_path = "./administrator/assets/media/settings/" . $settings["favicon"];
-        //         if (File::exists($image_path)) {
-        //             File::delete($image_path);
-        //         }
-        //         $data_settings['favicon'] = null;
-        //     }
-        // }
-
-        if ($request->hasFile('background_login_panel_admin')) {
-            if (array_key_exists("background_login_panel_admin", $settings)) {
-                $imageBefore = $settings["background_login_panel_admin"];
-                if (!empty($settings["background_login_panel_admin"])) {
-                    $image_path = "./administrator/assets/media/settings/" . $settings["background_login_panel_admin"];
-                    if (File::exists($image_path)) {
-                        File::delete($image_path);
-                    }
-                }
-            }
-
-            $image = $request->file('background_login_panel_admin');
-            $fileName  =  'background_login_panel_admin.' . $image->getClientOriginalExtension();
-            $path = upload_path('settings') . $fileName;
-            Image::make($image->getRealPath())->save($path, 100);
-            $data_settings['background_login_panel_admin'] = $fileName;
-        }
-        // elseif ($request->has('remove_background_login_panel_admin')) {
-        //     if (array_key_exists("background_login_panel_admin", $settings) && !empty($settings["background_login_panel_admin"])) {
-        //         $image_path = "./administrator/assets/media/settings/" . $settings["background_login_panel_admin"];
-        //         if (File::exists($image_path)) {
-        //             File::delete($image_path);
-        //         }
-        //         $data_settings['background_login_panel_admin'] = null;
-        //     }
-        // }
-
         
 
         $logs = []; // Buat array kosong untuk menyimpan log
@@ -158,7 +143,6 @@ class SettingController extends Controller
         //Write log
         createLog(static::$module, __FUNCTION__, 0,$logs);
 
-        return redirect(route('admin.settings'))->with(['success' => 'Data berhasil di update.']);
-
+        return redirect(route('admin.settings.admin.general'))->with(['success' => 'Data berhasil di update.']);
     }
 }

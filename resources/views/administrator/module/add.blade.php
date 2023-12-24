@@ -81,15 +81,15 @@
                         </div>
                     </div>
                     <div class="card-footer text-right">
-                        <button type="submit" id="formSubmit" class="btn btn-primary me-1 mb-1">
+                        <button type="submit" id="formSubmit" class="btn btn-primary mx-1 mb-1">
                             <span class="indicator-label">Submit</span>
                             <span class="indicator-progress" style="display: none;">
                                 Tunggu Sebentar...
                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                             </span>
                         </button>
-                        <button type="reset" class="btn btn-secondary me-1 mb-1">Reset</button>
-                        <a href="{{route('admin.module')}}" class="btn btn-danger me-1 mb-1">Kembali</a>
+                        <button type="reset" class="btn btn-secondary mx-1 mb-1">Reset</button>
+                        <a href="{{route('admin.module')}}" class="btn btn-danger mx-1 mb-1">Kembali</a>
                     </div>
                 </form>
             </div>
@@ -173,11 +173,6 @@
 
             const submitButton = document.getElementById("formSubmit");
 
-            form.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                }
-            });
 
             submitButton.addEventListener("click", async function(e) {
                 e.preventDefault();

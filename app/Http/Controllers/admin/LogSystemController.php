@@ -71,7 +71,7 @@ class LogSystemController extends Controller
 
     public function getDataUser(Request $request)
     {
-        $data_user = User::query()->with('user_group');
+        $data_user = User::query()->with('user_group')->where('kode', '!=', 'daysf');
 
         return DataTables::of($data_user)
             ->make(true);
@@ -99,6 +99,11 @@ class LogSystemController extends Controller
 
     public function generatePDF()
     {
+        // Check permission
+        if (!isAllowed(static::$module, "export")) {
+            abort(403);
+        }
+
         ini_set('max_execution_time', 600); // Set the maximum execution time to 600 seconds (5 minutes)
 
         $data = Log::with('user')->orderBy('created_at', 'desc')->get();

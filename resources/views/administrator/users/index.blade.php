@@ -28,7 +28,7 @@
                         @endif
                         <a href="javascript:void(0)" class="btn btn-primary" id="filterButton">Filter</a>
                     </div>
-                    
+
                 </div>
                 @include('administrator.users.filter.main')
                 <div class="card-body">
@@ -36,12 +36,12 @@
                         <table class="table" id="datatable">
                             <thead>
                                 <tr>
-                                    <th width="25">No</th>
-                                    <th width="">User Group</th>
-                                    <th width="">Nama</th>
-                                    <th width="">Email</th>
-                                    <th width="">Status</th>
-                                    <th width="200">Action</th>
+                                    <th width="15px">No</th>
+                                    <th width="200px">User Group</th>
+                                    <th width="50%">Nama</th>
+                                    <th width="50%">Email</th>
+                                    <th width="15px">Status</th>
+                                    <th width="200px">Action</th>
                                 </tr>
                             </thead>
                         </table>
@@ -232,49 +232,6 @@
 
             });
 
-            var optionUserGroup = $('#filterusergroup');
-
-
-            optionUserGroup.html(
-                '<option id="loadingSpinner" style="display: none;">' +
-                '<i class="fas fa-spinner fa-spin">' +
-                '</i> Sedang memuat...</option>'
-            );
-
-            var loadingSpinner = $('#loadingSpinner');
-
-            loadingSpinner.show(); // Tampilkan elemen animasi
-
-            $.ajax({
-                url: '{{ route('admin.users.getUserGroup') }}',
-                method: 'GET',
-                success: function(response) {
-                    var data = response.usergroup;
-                    var optionsHtml = ''; // Store the generated option elements
-
-                    // Iterate through each user group in the response data
-                    for (var i = 0; i < data.length; i++) {
-                        var userGroup = data[i];
-                        optionsHtml += '<option value="' + userGroup.id + '">' + userGroup
-                            .name + '</option>';
-                    }
-
-                    // Construct the final dropdown HTML
-                    var finalDropdownHtml = '<option value="">Semua</option>' + optionsHtml;
-
-                    optionUserGroup.html(finalDropdownHtml);
-
-                    loadingSpinner.hide(); // Hide the loading spinner after data is loaded
-                },
-                error: function() {
-                    // Handle the error case if the AJAX request fails
-                    console.error('Gagal memuat data User Group.');
-                    optionUserGroup.html('<option>Gagal memuat data</option>')
-                    loadingSpinner
-                        .hide(); // Hide the loading spinner even if there's an error
-                }
-            });
-
             $('#filter_submit').on('click', function(event) {
                 event.preventDefault(); // Prevent the default form submission behavior
 
@@ -287,6 +244,19 @@
                         '|usergroup=' + filterUserGroup)
                     .load();
             });
+
+            $('#reset-btn').on('click', function(event) {
+                event.preventDefault(); // Prevent the default form submission behavior
+
+                // Reset all input fields
+                $('#inputUserGroupName').val('');
+                $('#inputUserGroupId').val('');
+                $('#filterstatus').val('');
+
+                // Update the DataTable with the filtered data
+                data_table.ajax.url('{{ route('admin.users.getData') }}').load();
+            });
+
 
             function getStatus() {
                 return $("#filterstatus").val();

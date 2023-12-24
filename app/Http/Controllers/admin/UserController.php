@@ -292,17 +292,17 @@ class UserController extends Controller
             'message' => 'Status telah diubah.',
         ]);
     }
-    
-    public function getUserGroup(){
-        $usergroup = UserGroup::all();
 
-        return response()->json([
-            'usergroup' => $usergroup,
-        ]);
+    public function getDataUserGroup(Request $request)
+    {
+        $data = UserGroup::query();
+
+        return DataTables::of($data)
+            ->make(true);
     }
     
     public function generateKode(){
-        $generateKode = 'sanapp-' . substr(uniqid(), -5);
+        $generateKode = 'startweb-' . substr(uniqid(), -5);
 
         return response()->json([
             'generateKode' => $generateKode,

@@ -1,4 +1,4 @@
-<div class="col-md-6 pt-3">
+<div class="col-md-6 col-12 pt-3">
     <div class="form-group fv-row">
         <label class="required form-label">Status</label>
         <select class="form-control" data-hide-search="true" id="filterstatus">

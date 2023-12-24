@@ -191,7 +191,7 @@
                                 <div class="row">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-9 text-secondary">
-                                        <button type="submit" id="formSubmit" class="btn btn-primary me-1 mb-1">
+                                        <button type="submit" id="formSubmit" class="btn btn-primary mx-1 mb-1">
                                             <span class="indicator-label">Save Changes</span>
                                             <span class="indicator-progress" style="display: none;">
                                                 Tunggu Sebentar...
@@ -226,11 +226,6 @@
 
             const submitButton = document.getElementById("formSubmit");
 
-            form.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                }
-            });
 
             submitButton.addEventListener("click", async function(e) {
                 e.preventDefault();

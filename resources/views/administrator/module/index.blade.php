@@ -30,10 +30,10 @@
                         <table class="table table-striped" id="datatable">
                             <thead>
                                 <tr>
-                                    <th width="30">No</th>
-                                    <th width="">Nama</th>
-                                    <th width="">Identifier</th>
-                                    <th width="200">Action</th>
+                                    <th width="15px">No</th>
+                                    <th width="50%">Nama</th>
+                                    <th width="50%">Identifier</th>
+                                    <th width="200px">Action</th>
                                 </tr>
                             </thead>
                         </table>

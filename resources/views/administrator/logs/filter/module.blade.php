@@ -39,6 +39,7 @@
             </div>
             <div class="modal-footer bg-whitesmoke br">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="selectData-ModuleLogSystem">Pilih</button>
             </div>
         </div>
     </div>
@@ -46,6 +47,24 @@
 
 @push('js')
     <script>
+        // Function to add 'selected' class to the row based on the module identifiers
+        function addSelectedClassByModuleIdentifiers(moduleIdentifiers) {
+            var table = $('#datatableModuleModal').DataTable();
+            table.rows().deselect(); // Deselect all rows first
+            table.rows().nodes().to$().removeClass('selected'); // Remove 'selected' class from all rows
+
+            if (moduleIdentifiers) {
+                table.rows().every(function () {
+                    var rowData = this.data();
+                    if (rowData.identifiers === moduleIdentifiers) {
+                        this.select(); // Select the row
+                        $(this.node()).addClass('selected'); // Add 'selected' class
+                        return false; // Break the loop
+                    }
+                });
+            }
+        }
+
         $('#filterModuleLogSystem').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
 
@@ -66,13 +85,13 @@
                 order: [
                     [0, 'asc']
                 ],
-                // scrollX: true, // Enable horizontal scrolling
                 ajax: {
                     url: '{{ route('admin.logSystems.getDataModule') }}',
                     dataType: "JSON",
                     type: "GET",
                 },
-                columns: [{
+                columns: [
+                    {
                         render: function(data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
                         },
@@ -86,19 +105,43 @@
                         name: 'name'
                     },
                 ],
+                drawCallback: function(settings) {
+                    // Add 'selected' class based on the content of the input fields
+                    var moduleIdentifiers = $("#inputModule").val();
+                    addSelectedClassByModuleIdentifiers(moduleIdentifiers);
+                },
             });
-            //click di baris tabel barang
+
+            // click di baris tabel module
             $('#datatableModuleModal tbody').on('click', 'tr', function() {
+                // Remove the 'selected' class from all rows
+                $('#datatableModuleModal tbody tr').removeClass('selected');
+
+                // Add the 'selected' class to the clicked row
+                $(this).addClass('selected');
 
                 var data = data_table_module.row(this).data();
-
-                $("#inputModule").val(data.identifiers);
-                $("#inputModuleName").val(data.name);
-
-                $('#buttonCloseModuleModal').click();
-
             });
-            //end click di baris tabel barang
+
+            // click di tombol Pilih Module
+            $('#selectData-ModuleLogSystem').on('click', function() {
+                // Get the selected row data
+                var selectedRowData = data_table_module.rows('.selected').data()[0];
+
+                // Check if any row is selected
+                if (selectedRowData) {
+                    // Use the selected row data
+                    $("#inputModule").val(selectedRowData.identifiers);
+                    $("#inputModuleName").val(selectedRowData.name);
+
+                    // Close the modal
+                    $('#buttonCloseModuleModal').click();
+                } else {
+                    // Handle the case where no row is selected
+                    alert("Please select a row first.");
+                }
+            });
+            // end click di tombol Pilih Module
         });
     </script>
 @endpush

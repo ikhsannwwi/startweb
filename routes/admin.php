@@ -34,6 +34,7 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware(['auth.admin'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('dashboard/fetchData', [DashboardController::class, 'fetchData'])->name('admin.dashboard.fetchData');
 
         //Log Systems
         Route::get('log-systems', [LogSystemController::class, 'index'])->name('admin.logSystems');
@@ -65,7 +66,7 @@ Route::prefix('admin')->group(function () {
         Route::put('users/update', [UserController::class, 'update'])->name('admin.users.update');
         Route::delete('users/delete', [UserController::class, 'delete'])->name('admin.users.delete');
         Route::get('users/getDetail-{id}', [UserController::class, 'getDetail'])->name('admin.users.getDetail');
-        Route::get('users/getUserGroup', [UserController::class, 'getUserGroup'])->name('admin.users.getUserGroup');
+        Route::get('users/getDataUserGroup', [UserController::class, 'getDataUserGroup'])->name('admin.users.getDataUserGroup');
         Route::post('users/changeStatus',[UserController::class, 'changeStatus'])->name('admin.users.changeStatus');
         Route::get('users/generateKode',[UserController::class, 'generateKode'])->name('admin.users.generateKode');
         Route::post('users/checkEmail',[UserController::class, 'checkEmail'])->name('admin.users.checkEmail');
@@ -84,8 +85,11 @@ Route::prefix('admin')->group(function () {
         Route::post('profile/checkEmail',[ProfileController::class, 'checkEmail'])->name('admin.profile.checkEmail');
         
         //Setting
-        Route::get('settings', [SettingController::class, 'index'])->name('admin.settings');
-        Route::put('settings/update', [SettingController::class, 'update'])->name('admin.settings.update');
+        Route::get('settings', [SettingController::class, 'main'])->name('admin.settings');
+        Route::get('settings/admin', [SettingController::class, 'admin'])->name('admin.settings.admin');
+        Route::get('settings/frontpage', [SettingController::class, 'frontpage'])->name('admin.settings.frontpage');
+        Route::get('settings/admin/general', [SettingController::class, 'index'])->name('admin.settings.admin.general');
+        Route::put('settings/admin/general/update', [SettingController::class, 'update'])->name('admin.settings.admin.general.update');
 
         //Modul dan Modul Akses
         Route::get('module', [ModuleController::class, 'index'])->name('admin.module');
