@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="fileinput-preview-profileLabel">Filter Foto Profile</h5>
+                <h5 class="modal-title" id="fileinput-preview-profileLabel">Foto Profile</h5>
                 <button type="button" class="close" id="buttonCloseModuleModal" data-dismiss="modal"
                     aria-label="Close">
                     <span aria-hidden="true">&times;</span>
