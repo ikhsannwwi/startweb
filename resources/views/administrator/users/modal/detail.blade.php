@@ -53,26 +53,15 @@
                     }
 
                     // Ubah format tanggal
-                    var rawDate = data.profile.tanggal_lahir ? data.profile.tanggal_lahir : '';
-                    var tanggal = new Date(rawDate).getDate();
-                    var bulan = new Date(rawDate).getMonth() +
-                    1; // Tambahkan 1 karena bulan dimulai dari 0
-                    var tahun = new Date(rawDate).getFullYear();
-
-                    var formattedDate = tanggal + " " + formatBulan(bulan) + " " + tahun;
-
-                    // Tampilkan data dengan format bulan yang baru
-                    modalBody.html(
-                        '<div class="row">' +
-                        '<div class="col-5">' +
-                        '<div class="title">Tempat, Tanggal Lahir</div>' +
-                        '</div>' +
-                        '<div class="col-7">' +
-                        '<div class="data">: ' + data.profile.tempat_lahir + ', ' + formattedDate +
-                        '</div>' +
-                        '</div>' +
-                        '</div>'
-                    );
+                    if (data.profile) {
+                        var rawDate = data.profile.tanggal_lahir ? data.profile.tanggal_lahir : '';
+                        var tanggal = new Date(rawDate).getDate();
+                        var bulan = new Date(rawDate).getMonth() +
+                        1; // Tambahkan 1 karena bulan dimulai dari 0
+                        var tahun = new Date(rawDate).getFullYear();
+    
+                        var formattedDate = tanggal + " " + formatBulan(bulan) + " " + tahun;
+                    }
 
                     modalBody.html(
                         '<div class="row">' +
@@ -126,7 +115,7 @@
                         '<div class="title">Nama Lengkap</div>' +
                         '</div>' +
                         '<div class="col-7">' +
-                        '<div class="data">: ' + data.profile.full_name + '</div>' +
+                        '<div class="data">: ' + (data.profile ? data.profile.full_name : '-') + '</div>' +
                         '</div>' +
                         '</div>' +
 
@@ -135,7 +124,7 @@
                         '<div class="title">No Telepon</div>' +
                         '</div>' +
                         '<div class="col-7">' +
-                        '<div class="data">: ' + data.profile.no_telepon + '</div>' +
+                        '<div class="data">: ' + (data.profile ? data.profile.no_telepon : '-') + '</div>' +
                         '</div>' +
                         '</div>' +
 
@@ -144,7 +133,7 @@
                         '<div class="title">Pendidikan Terakhir</div>' +
                         '</div>' +
                         '<div class="col-7">' +
-                        '<div class="data">: ' + data.profile.pendidikan_terakhir + '</div>' +
+                        '<div class="data">: ' + (data.profile ? data.profile.pendidikan_terakhir : '-') + '</div>' +
                         '</div>' +
                         '</div>' +
 
@@ -153,7 +142,7 @@
                         '<div class="title">Tempat, Tanggal Lahir</div>' +
                         '</div>' +
                         '<div class="col-7">' +
-                        '<div class="data">: ' + data.profile.tempat_lahir + ', ' + formattedDate +
+                        '<div class="data">: ' + (data.profile ? data.profile.tempat_lahir : '-') + ', ' + (data.profile ? formattedDate : '-') +
                         '</div>' +
                         '</div>' +
                         '</div>' +
@@ -163,7 +152,7 @@
                         '<div class="title">Alamat</div>' +
                         '</div>' +
                         '<div class="col-7">' +
-                        '<div class="data">: ' + data.profile.alamat + '</div>' +
+                        '<div class="data">: ' + (data.profile ? data.profile.alamat : '-') + '</div>' +
                         '</div>' +
                         '</div>'
                     );
