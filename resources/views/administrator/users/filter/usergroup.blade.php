@@ -21,7 +21,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="filterUserGroupLabel">Filter UserGroup</h5>
-                <button type="button" class="close" id="buttonCloseUserGroup" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close m-1" id="buttonCloseUserGroup" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -142,7 +142,7 @@
 
                     swalWithBootstrapButtons.fire({
                         title: 'Failed!',
-                        text: 'Please select a user first.',
+                        text: 'Please select a data first.',
                         icon: 'error',
                         // timer: 1500, // 2 detik
                         showConfirmButton: true

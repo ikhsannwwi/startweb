@@ -160,6 +160,10 @@ class PermissionSeeder extends Seeder
                         "identifiers" => "admin_general",
                         "name"        => "Admin General",
                     ],
+                    [
+                        "identifiers" => "admin_smtp",
+                        "name"        => "Admin Smtp",
+                    ],
                 ]
             ],
         ];

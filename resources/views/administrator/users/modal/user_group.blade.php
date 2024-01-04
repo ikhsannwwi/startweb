@@ -1,48 +1,43 @@
-<div class="col-md-6 col-12">
-    <label for="inputUser">User</label>
-    <div class="row">
-        <div class="col-8" style="padding-right: 0;">
-            <!-- Menggunakan col-8 agar input lebih lebar dan menghapus padding kanan -->
-            <input type="text" class="form-control" id="inputUserName" readonly>
-            <input type="text" class="d-none" name="user" id="inputUser">
-        </div>
-        <div class="col-4" style="padding-left: 0;">
-            <!-- Menggunakan col-4 agar tombol "Search" lebih kecil dan menghapus padding kiri -->
-            <a href="#" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#filterUserLogSystem">
-                Search
-            </a>
+<div class="col-md-4 col-12 pt-3">
+    <div class="form-group fv-row mandatory">
+        <label for="inputUserGroup" class="form-label">UserGroup</label>
+        <div class="input-group">
+            <!-- Menggunakan input-group untuk menyatukan input dan tombol -->
+            <input type="text" class="form-control" id="inputUserGroupName" value="{{Route::is('admin.users.edit*') ? $data->user_group->name : ''}}" data-parsley-required="true" readonly>
+            <input type="text" class="d-none" name="user_group" value="{{Route::is('admin.users.edit*') ? $data->user_group->id : ''}}" id="inputUserGroupId">
+            <div class="input-group-append">
+                <!-- Menggunakan input-group-append untuk menambahkan elemen setelah input -->
+                <a href="#" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#filterUserGroup">
+                    Search
+                </a>
+            </div>
         </div>
     </div>
 </div>
 
-
-
-<!-- Modal Detail User -->
-<div class="modal fade" tabindex="-1" role="dialog" id="filterUserLogSystem" data-backdrop="false">
+<!-- Modal Detail UserGroup -->
+<div class="modal fade" tabindex="-1" role="dialog" id="filterUserGroup" data-backdrop="false">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="filterUserLogSystemLabel">Filter User</h5>
-                <button type="button" class="close m-1" id="buttonCloseUserLogSystem" data-dismiss="modal"
-                    aria-label="Close">
+                <h5 class="modal-title" id="filterUserGroupLabel">Filter UserGroup</h5>
+                <button type="button" class="close m-1" id="buttonCloseUserGroup" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id="filterUserLogSystemBody">
-                <table class="table" id="datatableUserModal">
+            <div class="modal-body" id="filterUserGroupBody">
+                <table class="table" id="datatableUserGroupModal">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th width="">User Group</th>
                             <th width="">Nama</th>
-                            <th width="">Email</th>
                         </tr>
                     </thead>
                 </table>
             </div>
             <div class="modal-footer bg-whitesmoke br">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="selectData-UserLogSystem">Pilih</button>
+                <button type="button" class="btn btn-primary" id="selectData-UserGroup">Pilih</button>
             </div>
         </div>
     </div>
@@ -51,17 +46,16 @@
 @push('js')
     <script>
         // Function to add 'selected' class to the row based on the user ID
-        function addSelectedClassByUserId(userId) {
-            var table = $('#datatableUserModal').DataTable();
+        function addSelectedClassByUserGroupId(userGroupId) {
+            var table = $('#datatableUserGroupModal').DataTable();
             table.rows().deselect(); // Deselect all rows first
             table.rows().nodes().to$().removeClass('selected'); // Remove 'selected' class from all rows
 
-            if (userId) {
-                table.rows().every(function () {
+            console.log(userGroupId);
+            if (userGroupId) {
+                table.rows().every(function() {
                     var rowData = this.data();
-                    console.log(rowData);
-                    console.log(userId);
-                    if (rowData.id === parseInt(userId)) {
+                    if (rowData.id === parseInt(userGroupId)) {
                         this.select(); // Select the row
                         $(this.node()).addClass('selected'); // Add 'selected' class
                         return false; // Break the loop
@@ -70,13 +64,13 @@
             }
         }
 
-        $('#filterUserLogSystem').on('show.bs.modal', function(event) {
+        $('#filterUserGroup').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
 
             // Now, you can initialize a new DataTable on the same table.
-            $("#datatableUserModal").DataTable().destroy();
-            $('#datatableUserModal tbody').remove();
-            var data_table_user = $('#datatableUserModal').DataTable({
+            $("#datatableUserGroupModal").DataTable().destroy();
+            $('#datatableUserGroupModal tbody').remove();
+            var data_table_user = $('#datatableUserGroupModal').DataTable({
                 "oLanguage": {
                     "oPaginate": {
                         "sFirst": "<i class='ti-angle-left'></i>",
@@ -91,40 +85,31 @@
                     [0, 'asc']
                 ],
                 ajax: {
-                    url: '{{ route('admin.logSystems.getDataUser') }}',
+                    url: '{{ route('admin.users.getDataUserGroup') }}',
                     dataType: "JSON",
                     type: "GET",
                 },
-                columns: [
-                    {
+                columns: [{
                         render: function(data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
                         },
                     },
                     {
-                        data: 'user_group.name',
-                        name: 'user_group.name'
-                    },
-                    {
                         data: 'name',
                         name: 'name'
-                    },
-                    {
-                        data: 'email',
-                        name: 'email'
                     },
                 ],
                 drawCallback: function(settings) {
                     // Add 'selected' class based on the content of the input fields
-                    var userId = $("#inputUser").val();
-                    addSelectedClassByUserId(userId);
+                    var userGroupId = $("#inputUserGroupId").val();
+                    addSelectedClassByUserGroupId(userGroupId);
                 },
             });
 
             // click di baris tabel user
-            $('#datatableUserModal tbody').on('click', 'tr', function() {
+            $('#datatableUserGroupModal tbody').on('click', 'tr', function() {
                 // Remove the 'selected' class from all rows
-                $('#datatableUserModal tbody tr').removeClass('selected');
+                $('#datatableUserGroupModal tbody tr').removeClass('selected');
 
                 // Add the 'selected' class to the clicked row
                 $(this).addClass('selected');
@@ -132,19 +117,19 @@
                 var data = data_table_user.row(this).data();
             });
 
-            // click di tombol Pilih User
-            $('#selectData-UserLogSystem').on('click', function() {
+            // click di tombol Pilih UserGroup
+            $('#selectData-UserGroup').on('click', function() {
                 // Get the selected row data
                 var selectedRowData = data_table_user.rows('.selected').data()[0];
 
                 // Check if any row is selected
                 if (selectedRowData) {
                     // Use the selected row data
-                    $("#inputUserName").val(selectedRowData.name);
-                    $("#inputUser").val(selectedRowData.id);
+                    $("#inputUserGroupName").val(selectedRowData.name);
+                    $("#inputUserGroupId").val(selectedRowData.id);
 
                     // Close the modal
-                    $('#buttonCloseUserLogSystem').click();
+                    $('#buttonCloseUserGroup').click();
                 } else {
                     // Handle the case where no row is selected
                     const swalWithBootstrapButtons = Swal.mixin({
@@ -157,14 +142,14 @@
 
                     swalWithBootstrapButtons.fire({
                         title: 'Failed!',
-                        text: 'Please select a user first.',
+                        text: 'Please select a data first.',
                         icon: 'error',
                         // timer: 1500, // 2 detik
                         showConfirmButton: true
                     });
                 }
             });
-            // end click di tombol Pilih User
+            // end click di tombol Pilih UserGroup
         });
     </script>
 @endpush

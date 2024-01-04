@@ -143,7 +143,7 @@ class UserController extends Controller
             abort(403);
         }
 
-        $data = User::find($id);
+        $data = User::with('user_group')->find($id);
 
         return view('administrator.users.edit',compact('data'));
     }

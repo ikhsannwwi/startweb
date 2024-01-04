@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -16,7 +17,7 @@ class AuthController extends Controller
 
     public function checkEmail(Request $request){
         if($request->ajax()){
-            $data = User::where('email', $request->email);
+            $data = User::where('email', $request->email)->first();
     
             if(empty($data)){
                 return response()->json([
@@ -57,18 +58,18 @@ class AuthController extends Controller
     
     public function loginProses(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'email' => 'required|string|email|max:255',
-        //     'password' => 'required|min:8|max:255',
-        // ]);
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|min:8|max:255',
+        ]);
 
-        // if ($validator->fails()) {
-        //     // return response()->json([
-        //     //     'status' => 'error',
-        //     //     'message' => 'Validator tidak valid',
-        //     // ],422);
-        //     return back()->withErrors($validator)->withInput();
-        // }
+        if ($validator->fails()) {
+            // return response()->json([
+            //     'status' => 'error',
+            //     'message' => 'Validator tidak valid',
+            // ],422);
+            return back()->withErrors($validator)->withInput();
+        }
         // dd($request->email,$request->password);
 
         $credentials = $request->only('email', 'password');

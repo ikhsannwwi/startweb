@@ -17,24 +17,17 @@
     <link rel="stylesheet" href="{{ template_stisla('modules/bootstrap-social/bootstrap-social.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/parsleyjs@2.9.2/src/parsley.min.css">
     <link rel="stylesheet" href="{{ template_stisla('modules/izitoast/css/iziToast.min.css') }}">
+    
+    <style>
+        :root {
+            --main-background-color: {{ $settings['admin_main_background_color'] ?? '#63ed7a' }};
+        }
+    </style>
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ template_stisla('css/style.css') }}">
     <link rel="stylesheet" href="{{ template_stisla('css/components.css') }}">
     @stack('css')
-    <!-- Start GA -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-
-        gtag('config', 'UA-94034622-3');
-    </script>
-    <!-- /END GA -->
 </head>
 
 <body>

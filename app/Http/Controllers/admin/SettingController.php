@@ -38,7 +38,7 @@ class SettingController extends Controller
         return view('administrator.settings.admin');
     }
 
-    public function index()
+    public function admin_general()
     {
         //Check permission
         if (!isAllowed(static::$module, "admin_general")) {
@@ -52,7 +52,7 @@ class SettingController extends Controller
         return view('administrator.settings.admin.index', compact('settings'));
     }
 
-    public function update(Request $request)
+    public function admin_general_update(Request $request)
     {
         // return $request;
         //Check permission
@@ -135,14 +135,69 @@ class SettingController extends Controller
             }
         }
 
-        
-
-        // Setelah perulangan selesai, $logs akan berisi semua log untuk setiap data yang diproses.
-
-
         //Write log
         createLog(static::$module, __FUNCTION__, 0,$logs);
 
         return redirect(route('admin.settings.admin.general'))->with(['success' => 'Data berhasil di update.']);
+    }
+
+    public function admin_smtp()
+    {
+        //Check permission
+        if (!isAllowed(static::$module, "admin_smtp")) {
+            abort(403);
+        }
+        $settings = Setting::get()->toArray();
+        
+        $settings = array_column($settings, 'value', 'name');
+
+        // Ambil pengaturan dari database dan tampilkan di halaman
+        return view('administrator.settings.admin.smtp', compact('settings'));
+    }
+
+    public function admin_smtp_update(Request $request)
+    {
+        // return $request;
+        //Check permission
+        if (!isAllowed(static::$module, "admin_smtp")) {
+            abort(403);
+        }
+
+        $settings = Setting::get()->toArray();
+        $settings = array_column($settings, 'value', 'name');
+
+        
+        $data_settings = [];
+        $data_settings["smtp_host_admin"] = $request->smtp_host_admin;
+        $data_settings["smtp_security_admin"] = $request->smtp_security_admin;
+        $data_settings["smtp_port_admin"] = $request->smtp_port_admin;
+        $data_settings["smtp_user_admin"] = $request->smtp_user_admin;
+        $data_settings["smtp_password_admin"] = $request->smtp_password_admin;
+
+
+        $logs = []; // Buat array kosong untuk menyimpan log
+
+        foreach ($data_settings as $key => $value) {
+            $data = [];
+
+            if (array_key_exists($key, $settings)) {
+                $data["value"] = $value;
+                $set = Setting::where('name', $key)->first();
+                $set->update($data);
+
+                $logs[] = ['---'.$key.'---' => ['Data Sebelumnya' => ['value' => $settings[$key]], 'Data terbaru' => ['value' => $value]]];
+            } else {
+                $data["name"] = $key;
+                $data["value"] = $value;
+                $set = Setting::create($data);
+
+                $logs[] = $set;
+            }
+        }
+
+        //Write log
+        createLog(static::$module, __FUNCTION__, 0,$logs);
+
+        return redirect(route('admin.settings.admin.smtp'))->with(['success' => 'Data berhasil di update.']);
     }
 }

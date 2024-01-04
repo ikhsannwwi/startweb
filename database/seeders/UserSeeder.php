@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $user_group = UserGroup::create([
-            'name' => 'dev',
+            'name' => 'Administrator',
             'status' => 1,
         ]);
         User::create([

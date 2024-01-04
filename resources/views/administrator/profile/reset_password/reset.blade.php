@@ -5,57 +5,55 @@
         <div class="container mt-5">
             <div class="row">
                 <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
-
                     @include('administrator.authentication.header')
-                    
+
 
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h4>Login</h4>
+                            <h4>Reset Password</h4>
                         </div>
 
                         <div class="card-body">
-                            <form method="POST" action="{{ route('admin.loginProses') }}" id="form"
-                                class="needs-validation" novalidate="" data-parsley-validate>
+                            <p class="text-muted">We will send a link to reset your password</p>
+                            <form action="{{ route('admin.profile.password.update', $resetPassword->token) }}" method="POST"
+                                id="form" novalidate="" data-parsley-validate>
                                 @csrf
                                 @method('POST')
+
                                 <div class="form-group">
-                                    <label for="inputEmail">Email</label>
-                                    <input id="inputEmail" type="email" class="form-control" name="email" tabindex="1"
-                                        data-parsley-required="true" data-parsley-type="email" data-parsley-trigger="change"
-                                        data-parsley-error-message="Masukan alamat email yang valid." autocomplete="off"
-                                        autofocus>
+                                    <label for="email">Email</label>
+                                    <input id="email" type="email" placeholder="Masukan Email" class="form-control"
+                                        autocomplete="off" name="email" tabindex="1" data-parsley-required="true"
+                                        data-parsley-type="email" data-parsley-trigger="change"
+                                        data-parsley-error-message="Masukan alamat email yang valid." autofocus>
                                     <div class="" style="color: #dc3545" id="accessErrorEmail"></div>
                                 </div>
 
                                 <div class="form-group">
-                                    <div class="d-block">
-                                        <label for="inputPassword" class="control-label">Password</label>
-                                        <div class="float-right">
-                                            <a href="{{route('admin.profile.password.request')}}" class="text-small">
-                                                Forgot Password?
-                                            </a>
-                                        </div>
+                                    <label for="passwordField">New Password</label>
+                                    <input id="passwordField" type="password" class="form-control pwstrength"
+                                        data-indicator="pwindicator" name="password" tabindex="2"
+                                        placeholder="Masukan Password" autocomplete="off" data-parsley-required="true">
+                                    <div id="pwindicator" class="pwindicator">
+                                        <div class="bar"></div>
+                                        <div class="label"></div>
                                     </div>
-                                    <input id="inputPassword" type="password" class="form-control" name="password"
-                                        autocomplete="off" tabindex="2" data-parsley-required="true"
-                                        data-parsley-minlength="8" data-parsley-trigger="change"
-                                        data-parsley-error-message="Password harus memiliki setidaknya 8 karakter.">
-                                    <div class="" style="color: #dc3545" id="accessErrorPassword"></div>
-                                </div>
+                                    <div class="text-sm" style="color: #dc3545" id="accessErrorPasssword"></div>
+                                    
+                                  </div>
 
-                                {{-- <div class="form-group">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="remember" class="custom-control-input" tabindex="3"
-                                            id="remember-me" {{ old('remember') ? 'checked' : '' }}>
-                                        <label class="custom-control-label" for="remember-me">Remember Me</label>
-                                    </div>
-                                </div> --}}
+                                <div class="form-group">
+                                    <label for="konfirmasiPasswordField">Confirm Password</label>
+                                    <input id="konfirmasiPasswordField" type="password" class="form-control" tabindex="2"
+                                        placeholder="Masukan Konfirmasi Password" name="konfirmasi_password"
+                                        autocomplete="off" data-parsley-required="true">
+                                        <div class="text-sm" style="color: #dc3545" id="accessErrorKonfirmasiPasssword"></div>
+                                </div>
 
                                 <div class="form-group">
                                     <button type="submit" id="formSubmit" class="btn btn-primary btn-lg btn-block"
                                         tabindex="4">
-                                        <span class="indicator-label">Login</span>
+                                        <span class="indicator-label">Submit</span>
                                         <span class="indicator-progress" style="display: none;">
                                             Tunggu Sebentar...
                                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -65,9 +63,6 @@
                             </form>
                         </div>
                     </div>
-                    {{-- <div class="mt-5 text-muted text-center">
-                        Don't have an account? <a href="auth-register.html">Create One</a>
-                    </div> --}}
                     @include('administrator.authentication.footer')
                 </div>
             </div>
@@ -84,26 +79,21 @@
 
             const submitButton = document.getElementById("formSubmit");
 
-            // form.addEventListener('keydown', function(e) {
-            //     if (e.key === 'Enter') {
-            //         e.preventDefault();
-            //     }
-            // });
 
             submitButton.addEventListener("click", async function(e) {
                 e.preventDefault();
-
                 indicatorBlock();
 
+                const passwordField = $('#passwordField').val().trim();
 
                 // Perform remote validation
                 const remoteValidationResultEmail = await validateRemoteEmail();
-                const inputEmail = $("#inputEmail");
+                const email = $("#email");
                 const accessErrorEmail = $("#accessErrorEmail");
                 if (!remoteValidationResultEmail.valid) {
                     // Remote validation failed, display the error message
                     accessErrorEmail.addClass('invalid-feedback');
-                    inputEmail.addClass('is-invalid');
+                    email.addClass('is-invalid');
 
                     accessErrorEmail.text(remoteValidationResultEmail
                         .errorMessage); // Set the error message from the response
@@ -112,43 +102,27 @@
                     return;
                 } else {
                     accessErrorEmail.removeClass('invalid-feedback');
-                    inputEmail.removeClass('is-invalid');
+                    email.removeClass('is-invalid');
                     accessErrorEmail.text('');
                 }
 
-                // Perform remote validation
-                const remoteValidationResultPassword = await validateRemotePassword();
-                const inputPassword = $("#inputPassword");
-                const accessErrorPassword = $("#accessErrorPassword");
-                if (!remoteValidationResultPassword.valid) {
-                    // Remote validation failed, display the error message
-                    accessErrorPassword.addClass('invalid-feedback');
-                    inputPassword.addClass('is-invalid');
-
-                    accessErrorPassword.text(remoteValidationResultPassword
-                        .errorMessage); // Set the error message from the response
-                    indicatorNone();
-
-                    return;
-                } else {
-                    accessErrorPassword.removeClass('invalid-feedback');
-                    inputPassword.removeClass('is-invalid');
-                    accessErrorPassword.text('');
+                if (passwordField !== '') {
+                    if (!validatePasswordConfirmation()) {
+                        return;
+                    }
                 }
 
                 // Validate the form using Parsley
                 if ($(form).parsley().validate()) {
                     indicatorSubmit();
-                    // Submit the form
                     form.submit();
                 } else {
                     // Handle validation errors
                     const validationErrors = [];
                     $(form).find(':input').each(function() {
-                        indicatorNone();
-
                         const field = $(this);
                         if (!field.parsley().isValid()) {
+                            indicatorNone();
                             const attrName = field.attr('name');
                             const errorMessage = field.parsley().getErrorsMessages().join(
                                 ', ');
@@ -182,39 +156,39 @@
                     'inline-block';
             }
 
-            async function validateRemotePassword() {
-                const inputEmail = $('#inputEmail');
-                const inputPassword = $('#inputPassword');
-                const remoteValidationUrl = "{{ route('admin.login.checkPassword') }}";
-                const csrfToken = "{{ csrf_token() }}";
+            $('#passwordField, #konfirmasiPasswordField').on('input', function() {
+                validatePasswordConfirmation();
+            });
 
-                try {
-                    const response = await $.ajax({
-                        method: "POST",
-                        url: remoteValidationUrl,
-                        data: {
-                            _token: csrfToken,
-                            email: inputEmail.val(),
-                            password: inputPassword.val()
-                        }
-                    });
+            function validatePasswordConfirmation() {
+                const passwordField = $('#passwordField');
+                const accessErrorPassword = $("#accessErrorPasssword");
+                const konfirmasiPasswordField = $('#konfirmasiPasswordField');
+                const accessErrorKonfirmasiPassword = $("#accessErrorKonfirmasiPasssword");
 
-                    // Assuming the response is JSON and contains a "valid" key
-                    return {
-                        valid: response.valid === true,
-                        errorMessage: response.message
-                    };
-                } catch (error) {
-                    console.error("Remote validation error:", error);
-                    return {
-                        valid: false,
-                        errorMessage: "An error occurred during validation."
-                    };
+                if (passwordField.val().length < 8) {
+                    passwordField.addClass('is-invalid');
+                    accessErrorPassword.text('Password harus memiliki setidaknya 8 karakter');
+                      indicatorNone();
+                    return false;
+                } else if (passwordField.val() !== konfirmasiPasswordField.val()) {
+                    passwordField.removeClass('is-invalid');
+                    accessErrorPassword.text('');
+                    konfirmasiPasswordField.addClass('is-invalid');
+                    accessErrorKonfirmasiPassword.text('Konfirmasi Password harus sama dengan Password');
+                      indicatorNone();
+                    return false;
+                } else {
+                    passwordField.removeClass('is-invalid');
+                    accessErrorPassword.text('');
+                    konfirmasiPasswordField.removeClass('is-invalid');
+                    accessErrorKonfirmasiPassword.text('');
+                    return true;
                 }
             }
 
             async function validateRemoteEmail() {
-                const inputEmail = $('#inputEmail');
+                const email = $('#email');
                 const remoteValidationUrl = "{{ route('admin.login.checkEmail') }}";
                 const csrfToken = "{{ csrf_token() }}";
 
@@ -224,7 +198,7 @@
                         url: remoteValidationUrl,
                         data: {
                             _token: csrfToken,
-                            email: inputEmail.val()
+                            email: email.val()
                         }
                     });
 

@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="DetailLabel">Detail</h5>
-                <button type="button" class="close" id="buttonCloseDetailModal" data-dismiss="modal"
+                <button type="button" class="close m-1" id="buttonCloseDetailModal" data-dismiss="modal"
                     aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

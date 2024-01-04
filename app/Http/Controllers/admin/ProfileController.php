@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers\admin;
 
-use DataTables;
+use DB;
 use File;
+use DataTables;
 use App\Models\admin\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\admin\Profile;
+use App\Mail\ResetPasswordMail;
+use App\Models\admin\ResetPassword;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Intervention\Image\Facades\Image;
 
 class ProfileController extends Controller
@@ -185,5 +191,74 @@ class ProfileController extends Controller
                 ]);
             }
         }
+    }
+
+    public function request(){
+        return view('administrator.profile.reset_password.index');
+    }
+
+    public function email(Request $request){
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        $email = $request->input('email');
+        $token = Str::random(64);
+
+        DB::table('password_resets')->updateOrInsert(
+            ['email' => $email],
+            ['token' => $token, 'created_at' => now()]
+        );
+
+        $user = User::where('email', $email)->first();
+
+        $mailData = [
+            'title' => 'Reset Password',
+            'email' => $email,
+            'token' => $token,
+            'username' => $user->name,
+            'resetLink' => route('admin.profile.password.reset', $token),
+        ];
+        Mail::to($email)->send(new ResetPasswordMail($mailData));
+        return redirect(route('admin.profile.password.request'))->with('success', 'Tautan berhasil dikirim melalui email');
+    }
+
+    public function resetPassword($token){
+        $resetPassword = ResetPassword::where('token', $token)->first();
+
+        if (!$resetPassword) {
+            abort(404);
+        }
+
+        return view('administrator.profile.reset_password.reset', compact('resetPassword'));
+    }
+
+    public function updatePassword(Request $request, $token){
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+            'konfirmasi_password' => 'required|min:8|same:password',
+        ]);
+
+        $resetPassword = ResetPassword::where('token', $token)
+                                  ->where('email', $request->input('email'))
+                                  ->first();
+
+        if (!$resetPassword) {
+            return redirect(route('admin.profile.password.reset', $token))->with('error', 'Email tidak sesuai');
+        }
+        
+        $user = User::where('email',$request->email)->first();
+        $user->update([
+            'password' => Hash::make($request->password),
+            'remember_token' => Str::random(60),
+        ]);
+
+        // Hapus token dari tabel reset password
+        ResetPassword::where('token', $token)
+            ->where('email', $request->input('email'))
+            ->delete();
+
+        return redirect()->route('admin.login')->with('success', 'Password has been reset successfully.');
     }
 }
